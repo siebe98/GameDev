@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using GameDevelopment_Project.Klassen;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
@@ -9,8 +10,21 @@ namespace GameDevelopment_Project
     /// </summary>
     public class Game1 : Game
     {
+
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+
+        Player player = new Player();
+
+        enum GameState
+        {
+            Menu,
+            Level1,
+            Level2,
+            TheEnd
+        }
+        //start met menu
+        GameState StateOfGame = GameState.Menu;
 
         public Game1()
         {
@@ -40,6 +54,9 @@ namespace GameDevelopment_Project
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Vector2 PlayerPosition = new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
+            player.Initialize(Content.Load<Texture2D>("idle"), PlayerPosition);
 
             // TODO: use this.Content to load your game content here
         }
@@ -79,6 +96,10 @@ namespace GameDevelopment_Project
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
+
+            spriteBatch.Begin();
+            player.Draw(spriteBatch);
+            spriteBatch.End();
         }
     }
 }
