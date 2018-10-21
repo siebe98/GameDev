@@ -1,0 +1,39 @@
+{
+  "WorkItem": {
+    "AffectedComponent": {
+      "Name": "",
+      "DisplayName": ""
+    },
+    "ClosedComment": "",
+    "ClosedDate": null,
+    "CommentCount": 0,
+    "Custom": null,
+    "Description": "Olá, tentei utilizar sua API mas econtrei problemas pois está usando 3.0 CTP\nTem como disponibilizar uma versão  .NET 3.5   XNA 3.1\n \nObrigado.",
+    "LastUpdatedDate": "2013-02-13T18:27:23.037-08:00",
+    "PlannedForRelease": "",
+    "ReleaseVisibleToPublic": false,
+    "Priority": {
+      "Name": "Low",
+      "Severity": 50,
+      "Id": 1
+    },
+    "ProjectName": "xnagif",
+    "ReportedDate": "2009-09-07T17:58:59.89-07:00",
+    "Status": {
+      "Name": "Proposed",
+      "Id": 1
+    },
+    "ReasonClosed": {
+      "Name": "Unassigned"
+    },
+    "Summary": "Game Studio 3.0 CTP Dont work",
+    "Type": {
+      "Name": "Issue",
+      "Id": 3
+    },
+    "VoteCount": 1,
+    "Id": 14070
+  },
+  "FileAttachments": [],
+  "Comments": []
+}

@@ -15,16 +15,20 @@ namespace GameDevelopment_Project
         SpriteBatch spriteBatch;
 
         Player player = new Player();
-
-        enum GameState
-        {
-            Menu,
-            Level1,
-            Level2,
-            TheEnd
-        }
-        //start met menu
-        GameState StateOfGame = GameState.Menu;
+        KeyboardState CurrentStateKeyboard;
+        //misschien niet nodig
+        KeyboardState PreviousStateKeyboard;
+        // random  waarde misschien nog aanpassen
+        float MoveSpeedPlayer = 5;
+        //enum GameState
+        //{
+        //    Menu,
+        //    Level1,
+        //    Level2,
+        //    TheEnd
+        //}
+        ////start met menu
+        //GameState StateOfGame = GameState.Menu;
 
         public Game1()
         {
@@ -81,7 +85,10 @@ namespace GameDevelopment_Project
                 Exit();
 
             // TODO: Add your update logic here
+            PreviousStateKeyboard = CurrentStateKeyboard;
+            CurrentStateKeyboard = Keyboard.GetState();
 
+            UpdatePlayerPosition(gameTime);
             base.Update(gameTime);
         }
 
@@ -100,6 +107,30 @@ namespace GameDevelopment_Project
             spriteBatch.Begin();
             player.Draw(spriteBatch);
             spriteBatch.End();
+        }
+
+        private void UpdatePlayerPosition(GameTime gameTime)
+        {
+            if (CurrentStateKeyboard.IsKeyDown(Keys.Left))
+            {
+                player.Position.X -= MoveSpeedPlayer;
+            }
+            if (CurrentStateKeyboard.IsKeyDown(Keys.Right))
+            {
+                player.Position.X += MoveSpeedPlayer;
+            }
+            if (CurrentStateKeyboard.IsKeyDown(Keys.Space))
+            {
+                player.Position.Y -= MoveSpeedPlayer;
+            }
+            if (CurrentStateKeyboard.IsKeyDown(Keys.Down))
+            {
+                player.Position.Y += MoveSpeedPlayer;
+            }
+            //speler buiten veld detectie
+            player.Position.X = MathHelper.Clamp(player.Position.X, 0, GraphicsDevice.Viewport.Width - player.Width);
+            player.Position.Y = MathHelper.Clamp(player.Position.Y, 0, GraphicsDevice.Viewport.Height - player.Height);
+
         }
     }
 }

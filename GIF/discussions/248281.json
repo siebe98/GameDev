@@ -1,0 +1,26 @@
+[
+  {
+    "Id": "574910",
+    "ThreadId": "248281",
+    "Html": "\r\n<p>Hi,&nbsp;</p>\r\n<p>I've just downloaded <strong>XNA Gif Animation Library</strong> for <strong>XNA Game Studio 4.0</strong>. When I try to load a gif, there's an error prompting &quot;The size of the data passed in is too large or too small for this resource&quot;.</p>\r\n<p><span style=\"white-space:pre\"></span>By the way,&nbsp;here's someone with the same problem:&nbsp;<a href=\"http://stackoverflow.com/questions/4496266/xna-gif-animation-library-problem\">http://stackoverflow.com/questions/4496266/xna-gif-animation-library-problem</a></p>\r\n<p>Seems like the error is in the GifAnimationContentTypeReader.cs, more specifically in the SetData:&nbsp;</p>\r\n<p><span style=\"white-space:pre\"></span>&nbsp;frames[i].SetData&lt;byte&gt;(j, rect, data, 0, data.Length);</p>\r\n<p>The gifs I'm trying to load are in SurfaceFormat&nbsp;BGR565. If I replace the Texture2D constructor:</p>\r\n<p><span style=\"white-space:pre\"></span>frames[i] = new Texture2D(graphicsDevice, width, height, false, format);</p>\r\n<p>by:&nbsp;</p>\r\n<p><span style=\"white-space:pre\"></span>frames[i] = new Texture2D(graphicsDevice, width, height);</p>\r\n<p>The SurfaceFormat is ignored (assuming the default SurfaceFormat Color), and the error is gone (althouh the gif renders in strange blueish colors, probably for the different components in RGB and BGR).</p>\r\n<p>My question is: <strong>why is this error happening? Anyone knows how to solve it without the blue colors?</strong></p>\r\n",
+    "PostedDate": "2011-03-03T03:17:08.69-08:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "841106",
+    "ThreadId": "248281",
+    "Html": "<p>Hi,</p>\r\n<p><span>Convert RGBA to BGRA</span></p>\r\n<p>Change GifAnimationContentTypeReader with this code</p>\r\n<p><span><br /></span></p>\r\n<p>\r\n<pre>namespace GifAnimation\r\n{\r\n    using Microsoft.Xna.Framework.Content;\r\n    using Microsoft.Xna.Framework.Graphics;\r\n    using System;\r\n    using Microsoft.Xna.Framework;\r\n\r\n    public sealed class GifAnimationContentTypeReader : ContentTypeReader\r\n    {\r\n        protected override GifAnimation Read(ContentReader input, GifAnimation existingInstance)\r\n        {\r\n            int num = input.ReadInt32();\r\n            Texture2D[] frames = new Texture2D[num];\r\n            IGraphicsDeviceService service = (IGraphicsDeviceService) input.ContentManager.ServiceProvider.GetService(typeof(IGraphicsDeviceService));\r\n            if (service == null)\r\n            {\r\n                throw new ContentLoadException();\r\n            }\r\n            GraphicsDevice graphicsDevice = service.GraphicsDevice;\r\n            if (graphicsDevice == null)\r\n            {\r\n                throw new ContentLoadException();\r\n            }\r\n            for (int i = 0; i &lt; num; i++)\r\n            {\r\n                SurfaceFormat format = (SurfaceFormat) input.ReadInt32();\r\n                int width = input.ReadInt32();\r\n                int height = input.ReadInt32();\r\n                int numberLevels = input.ReadInt32();\r\n                frames[i] = new Texture2D(graphicsDevice, width, height);\r\n                for (int j = 0; j &lt; numberLevels; j++)\r\n                {\r\n                    int count = input.ReadInt32();\r\n                    byte[] data = input.ReadBytes(count);\r\n                    byte[] tempByte = new byte[data.Length];\r\n                    for (int a = 0; a &lt; data.Length; a += 4)\r\n                    {\r\n                        tempByte[a] = data[a + 2];\r\n                        tempByte[a + 1] = data[a + 1];\r\n                        tempByte[a + 2] = data[a];\r\n                        tempByte[a + 3] = data[a + 3];\r\n                    }\r\n\r\n                    frames[i].SetData(tempByte);\r\n                }\r\n            }\r\n            input.Close();\r\n            return GifAnimation.FromTextures(frames);\r\n        }\r\n    }\r\n}\r\n</pre>\r\n</p>",
+    "PostedDate": "2012-05-25T16:33:20.993-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  },
+  {
+    "Id": "1036168",
+    "ThreadId": "248281",
+    "Html": "thanks<br />\n",
+    "PostedDate": "2013-04-26T09:31:14.583-07:00",
+    "UserRole": null,
+    "MarkedAsAnswerDate": null
+  }
+]
